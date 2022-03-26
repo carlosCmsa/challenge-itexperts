@@ -1,3 +1,5 @@
+</br>
+
 ## 📃 Sobre o projeto
 
 Esse projeto foi uma proposta de desafio final realizado durante o programa de desenvolvimento e capacitação técnica IT Experts, e consiste em uma API de gerenciamento de conta bancária.
