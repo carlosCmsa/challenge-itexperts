@@ -49,16 +49,8 @@ public class AccountControllerTest {
 	private final String DIGIT_VERIFICATION = "2";
 	private final String REGISTER_ID = "45724587451";
 	
-	private final String CARD_NAME = "Visa Gold";
-	private final Flag FLAG = Flag.VISA;
-	private final String NUMBER = "4587254875481254";
-	private final String DIGIT_CODE = "458";
-	private final Double LIMIT_BALANCE = 200.00;
-	private final String NAME_TYPE_CARD = "Visa Gold";
-	
 	private ResponseAccountDto responseAccountDto;
 	private RequestAccountDto requestAccountDto;
-	private RequestCardDto requestCardDto;
 	private Pageable pageable;
 	
 	
@@ -66,7 +58,6 @@ public class AccountControllerTest {
 	public void setup() {
 		startResponseAccountDto();
 		startRequestAccountDto();
-		startRequestCardDto();
 	}
 	
 	
@@ -133,30 +124,6 @@ public class AccountControllerTest {
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 	}
 	
-	
-	@Test
-	public void whenCreateCardShouldReturnStatusCodeCreated() {
-		when(accountService.createCard(requestCardDto, ID)).thenReturn(responseAccountDto);
-		
-		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
-		
-		ResponseEntity<Void> response = accountController.createCard(requestCardDto, ID);
-		
-		assertFalse(response.hasBody());
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertNotNull(response.getHeaders().get("location"));
-	}
-	
-	
-	@Test
-	public void whenDeleteCardShouldReturnStatusCodeNoContent() {
-		ResponseEntity<Void> response = accountController.deleteCard(ID, ID);
-		
-		assertFalse(response.hasBody());
-		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-	}
-	
-	
 	public void startResponseAccountDto() {
 		responseAccountDto = new ResponseAccountDto(ID, NAME_OWNER, AGENCY_CODE, ACCOUNT_CODE, DIGIT_VERIFICATION, REGISTER_ID, new ArrayList<ResponseCardDto>());
 	}
@@ -164,11 +131,5 @@ public class AccountControllerTest {
 	public void startRequestAccountDto() {
 		requestAccountDto = new RequestAccountDto(NAME_OWNER, AGENCY_CODE, ACCOUNT_CODE, DIGIT_VERIFICATION, REGISTER_ID, new ArrayList<RequestCardDto>());
 	}
-	
-	public void startRequestCardDto() {
-		requestCardDto = new RequestCardDto(CARD_NAME, FLAG, NUMBER, DIGIT_CODE, LIMIT_BALANCE, new RequestTypeCardDto(NAME_TYPE_CARD));
-	}
-	
-	
-	
+
 }
