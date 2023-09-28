@@ -26,11 +26,11 @@ Esse projeto foi uma proposta de desafio final realizado durante o programa de d
 [![](https://img.shields.io/badge/deleta%20uma%20conta%20existente.-00FFFF?style=for-the-badge)](#)
 
 [![](https://img.shields.io/badge/post-FFFF00?style=for-the-badge)](#)
-[![](https://img.shields.io/badge//api/v1/cards/{idaccount}-FF00FF?style=for-the-badge)](#)
+[![](https://img.shields.io/badge//api/v1/accounts/%7Bid%7D/cards-FF00FF?style=for-the-badge)](#)
 [![](https://img.shields.io/badge/cria%20um%20novo%20cart%C3%A3o%20para%20uma%20conta%20existente.-00FFFF?style=for-the-badge)](#)
 
 [![](https://img.shields.io/badge/delete-FFFF00?style=for-the-badge)](#)
-[![](https://img.shields.io/badge//api/v1/cards/%7BidAccount%7D/%7BidCard%7D-FF00FF?style=for-the-badge)](#)
+[![](https://img.shields.io/badge//api/v1/accounts/%7BidAccount%7D/cards/%7BidCard%7D-FF00FF?style=for-the-badge)](#)
 [![](https://img.shields.io/badge/deleta%20um%20cart%C3%A3o%20de%20uma%20conta%20existente.-00FFFF?style=for-the-badge)](#)
 
 
