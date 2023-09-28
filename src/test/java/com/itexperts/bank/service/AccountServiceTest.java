@@ -66,6 +66,7 @@ public class AccountServiceTest {
 	private final String EXISTING_ACCOUNT_MESSAGE = "Não foi possível criar uma conta. Já existe uma conta com o 'registerId' informado.";
 	private final String EXISTING_CARD_MESSAGE = "Não foi possível criar um cartão. Já existe um cartão com o 'number' informado.";
 	private final String ACCOUNT_ACTIVE_CARDS_MESSAGE = "Não foi possível deletar a conta. A conta informada possui cartões ativos.";
+	private final String CARD_NOT_FOUND_MESSAGE = "Não foi possível encontrar um cartão com o id informado.";
 	
 	private Card card;
 	private Account account;
@@ -213,6 +214,86 @@ public class AccountServiceTest {
 		}
 	}
 	
+	
+	@Test
+	public void whenCreateCardShouldReturnResponseAccountDto() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.of(account));
+		when(cardRepository.findByNumber(NUMBER)).thenReturn(Optional.empty());
+		
+		ResponseAccountDto responseAccountDto = accountService.createCard(requestCardDto, ID);
+		
+		assertNotNull(responseAccountDto);
+		assertEquals(ID, responseAccountDto.getId());
+	}
+	
+	
+	@Test
+	public void whenCreateCardShouldThrowAccountNotFoundException() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.empty());
+		
+		try {
+			accountService.createCard(requestCardDto, ID);
+			
+		}catch(AccountNotFoundException ex) {
+			assertEquals(AccountNotFoundException.class, ex.getClass());
+			assertEquals(ACCOUNT_NOT_FOUND_MESSAGE, ex.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void whenCreateCardShouldThrowExistingCardException() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.of(account));
+		when(cardRepository.findByNumber(NUMBER)).thenReturn(Optional.of(card));
+		
+		try {
+			accountService.createCard(requestCardDto, ID);
+			
+		}catch(ExistingCardException ex) {
+			assertEquals(ExistingCardException.class, ex.getClass());
+			assertEquals(EXISTING_CARD_MESSAGE, ex.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void whenDeleteCardShouldReturnNothing() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.of(account));
+		when(cardRepository.findByIdAndAccountId(ID, ACCOUNT_ID)).thenReturn(Optional.of(card));
+		
+		accountService.deleteCard(ID, ID);
+	}
+	
+	
+	@Test
+	public void whenDeleteCardShouldThrowAccountNotFoundException() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.empty());
+		
+		try {
+			accountService.deleteCard(ID, ID);
+			
+		}catch(AccountNotFoundException ex) {
+			assertEquals(AccountNotFoundException.class, ex.getClass());
+			assertEquals(ACCOUNT_NOT_FOUND_MESSAGE, ex.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void whenDeleteCardShouldThrowCardNotFoundException() {
+		when(accountRepository.findById(ID)).thenReturn(Optional.of(account));
+		when(cardRepository.findByIdAndAccountId(ID, ACCOUNT_ID)).thenReturn(Optional.empty());
+		
+		try {
+			accountService.deleteCard(ID, ID);
+			
+		}catch(CardNotFoundException ex) {
+			assertEquals(CardNotFoundException.class, ex.getClass());
+			assertEquals(CARD_NOT_FOUND_MESSAGE, ex.getMessage());
+		}
+	}
+	
+	
 	public void startAccount() {
 		account = new Account(ID, NAME_OWNER, AGENCY_CODE, ACCOUNT_CODE, DIGIT_VERIFICATION, REGISTER_ID, new ArrayList<Card>());
 		
@@ -227,4 +308,8 @@ public class AccountServiceTest {
 		card = new Card(ID, CARD_NAME, FLAG, NUMBER, DIGIT_CODE, LIMIT_BALANCE, ACCOUNT_ID, new TypeCard());
 		requestCardDto = new RequestCardDto(CARD_NAME, FLAG, NUMBER, DIGIT_CODE, LIMIT_BALANCE, new RequestTypeCardDto(NAME_TYPE_CARD));
 	}
+	
+	
+	
+
 }

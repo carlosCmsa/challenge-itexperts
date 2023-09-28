@@ -91,4 +91,38 @@ public class AccountController {
 		accountService.deleteAccount(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	
+	@ApiOperation("cria um novo cartão para uma conta existente.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Created" ),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	@PostMapping("/{id}/cards")
+	public ResponseEntity<Void> createCard(@Valid @RequestBody RequestCardDto card, @PathVariable Integer id){
+		ResponseAccountDto accountDto = accountService.createCard(card, id);
+		
+		URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(accountDto.getId())
+                .toUri();
+		
+		return ResponseEntity.created(location).build();
+	}
+	
+	
+	@ApiOperation("deleta um cartão de uma conta existente.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "No Content" ),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	@DeleteMapping("/{idAccount}/cards/{idCard}")
+	public ResponseEntity<Void> deleteCard(@PathVariable Integer idAccount, @PathVariable Integer idCard){
+		accountService.deleteCard(idAccount, idCard);
+		
+		return ResponseEntity.noContent().build();
+	}
 }
